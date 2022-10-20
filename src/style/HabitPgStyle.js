@@ -95,7 +95,7 @@ margin-right: 35px;
 margin-top: 20px;
 padding: 10px;
 
-a{
+p{
     display: flex;
     height:35px;
     align-items: center;

@@ -10,7 +10,7 @@ const arrayWeek = item.days
     return (
         <HabitCardSt >
             <ImgStyle onClick={()=>del(item.id)}>
-                <img src={trash}></img>
+                <img alt="nada" src={trash}></img>
             </ImgStyle>
             <h1>{item.name}</h1>
             <WeekBtnStyle>

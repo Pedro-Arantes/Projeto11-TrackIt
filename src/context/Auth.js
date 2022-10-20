@@ -6,7 +6,7 @@ function DataProvider ({children}){
 
 const [data,setData] = useState("")
 const [img,setImg] = useState("")
-const [perc,setPerc] = useState("")
+const [perc,setPerc] = useState(0)
 
 return(
 

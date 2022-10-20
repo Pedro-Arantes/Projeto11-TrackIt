@@ -21,6 +21,7 @@ export default function HabitPage() {
     const [habits, setHabits] = useState([])
     const [reload, setReload] = useState("")
     const [clean, setClean] = useState(false)
+    const { perc} = useContext(DataContext)
 
     const navigate = useNavigate();
     const WeekArray = ["D", "S", "T", "Q", "Q", "S", "S"];
@@ -61,7 +62,7 @@ export default function HabitPage() {
         }
         GetHabit()
 
-    }, [reload])
+    }, [reload,data,navigate])
 
     const SaveHabit = () => {
 
@@ -86,14 +87,14 @@ export default function HabitPage() {
                 setName("")
                 setDays([])
                 setStat(true)
-                
+                setClean(false)
                 
             }
 
             const tratarErro = (resp) => {
                 //console.log(resp)
                 alert(resp.response.data.message)
-
+                setClean(false)
             }
 
 
@@ -101,6 +102,7 @@ export default function HabitPage() {
             requisicao.then(tratarSucesso)
             requisicao.catch(tratarErro)
             setStat(false)
+            setClean(true)
         }
 
     }
@@ -168,12 +170,12 @@ export default function HabitPage() {
                     <BtnPlus onClick={CreateHabit}>+</BtnPlus>
                 </TitleStyle>
                 <HabitStyle stat={status} >
-                    <input onChange={e => setName(e.target.value)} value={name} placeholder="nome do hábito"></input>
+                    <input disabled={clean}onChange={e => setName(e.target.value)} value={name} placeholder="nome do hábito"></input>
                     <WeekBtnStyle>
-                        <BtnDay   days={days} week={WeekArray}  func={ClickDay}  />
+                        <BtnDay  clean={clean} days={days} week={WeekArray}  func={ClickDay}  />
                     </WeekBtnStyle>
                     <CancSaveStyle >
-                        <a onClick={Cancel}>Cancelar</a>
+                        <p onClick={Cancel}>Cancelar</p>
                         <button onClick={()=>SaveHabit()}>
                             {stat === true ? "Salvar" : <ThreeDots height="80"
                                 width="80"
@@ -192,7 +194,7 @@ export default function HabitPage() {
                 </SpanStyle> : habits.map((item, id) => <HabitCard del={DeleteHabit} num={id} item={item} key={id} arr={WeekArray} />)}
 
             </MainStyled>
-            <Footer />
+            <Footer perc={perc} />
         </>
     )
 }
