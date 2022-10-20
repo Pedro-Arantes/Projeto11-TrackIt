@@ -154,7 +154,7 @@ export default function TodayPage() {
 }
 
 const MainStyled = styled.main`
-height: 80vh;
+height: 100%;
 width: 100%;
 margin-top: 70px;
 background-color: #E5E5E5;
@@ -176,7 +176,8 @@ p{
 const HabitBox = styled.div`
 display: flex;
 flex-direction: column;
-margin-bottom: 100px;
+margin-bottom: 115px;
+
 
 align-items: center;
 gap: 10px;
