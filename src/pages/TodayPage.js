@@ -176,7 +176,7 @@ p{
 const HabitBox = styled.div`
 display: flex;
 flex-direction: column;
-margin-bottom: 70px;
+margin-bottom: 100px;
 
 align-items: center;
 gap: 10px;
