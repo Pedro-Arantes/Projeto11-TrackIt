@@ -136,6 +136,7 @@ display: flex;
 gap: 5px;
 justify-content: flex-start;
 margin-left: 15px;
+margin-top: 6px;
 
 
 `
@@ -199,6 +200,8 @@ img{
 }
 `
 export const BtnPlus = styled.button`
-
+display: flex;
+align-items: center;
+justify-content: center;
 color: white;
 `

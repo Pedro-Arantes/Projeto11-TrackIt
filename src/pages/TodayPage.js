@@ -56,7 +56,7 @@ export default function TodayPage() {
                     
                     let percent = (partialValue)/ totalValue ;
                     percent = percent*100
-                
+                    percent = percent.toFixed(0)
                     setPerc( percent ) 
                     
                 }
@@ -176,7 +176,7 @@ p{
 const HabitBox = styled.div`
 display: flex;
 flex-direction: column;
-
+margin-bottom: 70px;
 
 align-items: center;
 gap: 10px;
