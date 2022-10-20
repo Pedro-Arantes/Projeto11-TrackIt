@@ -4,12 +4,13 @@ export const DataContext = createContext({})
 
 function DataProvider ({children}){
 
-const [data,setData] = useState("n")
-
+const [data,setData] = useState("")
+const [img,setImg] = useState("")
+const [perc,setPerc] = useState("")
 
 return(
 
-    <DataContext.Provider value={{name: "Pedro",data,setData}}>
+    <DataContext.Provider value={{data,setData,img,perc,setImg,setPerc}}>
         {children}
     </DataContext.Provider>
 )

@@ -13,6 +13,8 @@ export default function LoginPage() {
     const [senha, setSenha] = useState('')
     const [status, setStatus] = useState(false)
     const { setData } = useContext(DataContext)
+    const { setImg } = useContext(DataContext)
+  
     const navigate = useNavigate();
     const submit = (e) => {
         VerificaLogin();
@@ -28,9 +30,13 @@ export default function LoginPage() {
 
         const tratarSucesso = (resposta) => {
             console.log(resposta)
-
+            const token = resposta.data.token
+            const img = resposta.data.image
+            setData(token)
+            setImg(img)
             navigate("/hoje")
         }
+
         const tratarErro = (resp) => {
             console.log(resp)
             alert(resp.response.data.message)

@@ -55,12 +55,14 @@ table {
 *{
     box-sizing: border-box;
 	font-family: 'Lexend Deca', sans-serif;
+	
+}
+body{
+	background-color: #E5E5E5;
+	
 }
 
-.root{
-	width: 100%;
-	height: 100%;
-}
+
 
 `
 

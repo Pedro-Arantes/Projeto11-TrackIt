@@ -37,5 +37,9 @@ h3{
     margin-left: 10px;
     margin-right: 10px;
 }
+a{
+    text-decoration: none;
+    color: #52B6FF;
+}
 
 `

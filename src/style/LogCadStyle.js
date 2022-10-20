@@ -2,13 +2,14 @@ import styled from 'styled-components';
 
 
 export const MainStyled = styled.main`
-margin-top: 60px;
 
+height: 100vh;
+width: 100vw;
 display: flex;
 flex-direction: column;
 align-items: center;
 justify-content: center;
-
+background-color: white;
 gap: 15px;
 
 img{
@@ -56,6 +57,7 @@ export const LoadingBtn = styled.button`
     background-color: #52B6FF;
     font-size: 21px;
     color: white;
+    opacity: 0.7;
 
     border-radius: 5px;
     border-style: none;

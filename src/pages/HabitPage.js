@@ -1,171 +1,198 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import styled from 'styled-components';
-
+import { MainStyled, TitleStyle, HabitStyle, WeekBtnStyle, CancSaveStyle, SpanStyle,BtnPlus } from '../style/HabitPgStyle';
+import { useContext } from "react";
+import { DataContext } from "../context/Auth";
+import { useState, useEffect } from 'react';
+import BtnDay from "../components/BtnDay";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import HabitCard from "../components/HabitCard";
+import { ThreeDots } from 'react-loader-spinner'
 
 export default function HabitPage() {
 
+    const { img } = useContext(DataContext)
+    const { data } = useContext(DataContext)
+    const [status, setStatus] = useState(false)
+    const [stat, setStat] = useState(true)
+    const [name, setName] = useState("")
+    const [days, setDays] = useState([])
+    const [habits, setHabits] = useState([])
+    const [reload, setReload] = useState("")
+    const [clean, setClean] = useState(false)
+
+    const navigate = useNavigate();
+    const WeekArray = ["D", "S", "T", "Q", "Q", "S", "S"];
+    const CreateHabit = () => {
+        if (status === false) {
+            setStatus(true)
+        }
+
+    }
+    useEffect(() => {
+        const GetHabit = () => {
+
+
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${data}`
+                }
+            }
+
+            const tratarSucesso = (resposta) => {
+                //console.log(resposta.data)
+                const dataArray = resposta.data
+                setHabits(dataArray)
+            }
+
+            const tratarErro = (resp) => {
+                //console.log(resp)
+                alert(resp.response.data.message)
+                navigate("/")
+                window.location.reload()
+            }
+
+
+            const requisicao = axios.get('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits', config);
+            requisicao.then(tratarSucesso)
+            requisicao.catch(tratarErro)
+
+        }
+        GetHabit()
+
+    }, [reload])
+
+    const SaveHabit = () => {
+
+        if (days.length === 0) {
+            alert("Precisa selecionar pelo menos um dia!!")
+        } else {
+            const obj = {
+                name: name,
+                days: days
+            }
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${data}`
+                }
+            }
+
+            const tratarSucesso = (resposta) => {
+                //console.log(resposta)
+                
+                setStatus(false)
+                setReload(resposta)
+                setName("")
+                setDays([])
+                setStat(true)
+                
+                
+            }
+
+            const tratarErro = (resp) => {
+                //console.log(resp)
+                alert(resp.response.data.message)
+
+            }
+
+
+            const requisicao = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits', obj, config);
+            requisicao.then(tratarSucesso)
+            requisicao.catch(tratarErro)
+            setStat(false)
+        }
+
+    }
+
+    const DeleteHabit = (id) => {
+        const resposta = window.confirm("Deseja excluir esse hábito??")
+        if (resposta) {
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${data}`
+                }
+            }
+
+            const tratarSucesso = (resposta) => {
+                //console.log(resposta)
+
+                setReload(id)
+            }
+
+            const tratarErro = (resp) => {
+                //console.log(resp)
+                alert(resp.response.data.message)
+
+            }
+
+
+            const requisicao = axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`, config);
+            requisicao.then(tratarSucesso)
+            requisicao.catch(tratarErro)
+        }
+
+
+
+    }
+
+    const Cancel = () => {
+
+        setStatus(false)
+    }
+
+    const ClickDay = (par) =>{
+        if (!days.includes(par) ) {
+            
+            
+            const arr = [...days,par];
+            //console.log(arr)
+            setDays(arr);
+        }else{
+            
+           
+            const arr = days.filter((item)=>item !== par)
+            setDays(arr)
+            //console.log(arr)
+        }
+        
+    }
+    console.log(days)
+
     return (
         <>
-            <Header />
+            <Header img={img} />
             <MainStyled>
                 <TitleStyle>
                     <p>Meus hábitos</p>
-                    <button>+</button>
+                    <BtnPlus onClick={CreateHabit}>+</BtnPlus>
                 </TitleStyle>
-                <HabitStyle>
-                    <input placeholder="nome do hábito"></input>
+                <HabitStyle stat={status} >
+                    <input onChange={e => setName(e.target.value)} value={name} placeholder="nome do hábito"></input>
                     <WeekBtnStyle>
-                        <button>D</button>
-                        <button>S</button>
-                        <button>T</button>
-                        <button>Q</button>
-                        <button>Q</button>
-                        <button>S</button>
-                        <button>S</button>
+                        <BtnDay   days={days} week={WeekArray}  func={ClickDay}  />
                     </WeekBtnStyle>
-                    <CancSaveStyle>
-                        <a>Cancelar</a>
-                        <button>Salvar</button>
+                    <CancSaveStyle >
+                        <a onClick={Cancel}>Cancelar</a>
+                        <button onClick={()=>SaveHabit()}>
+                            {stat === true ? "Salvar" : <ThreeDots height="80"
+                                width="80"
+                                radius="9"
+                                color="#FFFFFF"
+                                ariaLabel="three-dots-loading"
+                                wrapperStyle={{}}
+                                wrapperClassName=""
+                                visible={true} />}
+                        </button>
                     </CancSaveStyle>
 
                 </HabitStyle>
-                <SpanStyle>
+                {WeekArray.length === 0 ? <SpanStyle>
                     Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!
-                </SpanStyle>
+                </SpanStyle> : habits.map((item, id) => <HabitCard del={DeleteHabit} num={id} item={item} key={id} arr={WeekArray} />)}
+
             </MainStyled>
             <Footer />
         </>
     )
 }
-const MainStyled = styled.main`
-margin-top: 70px;
-display: flex;
-flex-direction: column;
-align-items: center;
-
-height: 100%;
-width: 100%;
-
-background-color: #E5E5E5;
-
-
-p{
-    font-size: 23px;
-    color: #126BA5;
-    font-weight: 400;
-}
-button{
-    border-style: none;
-    background-color: #52B6FF;
-
-    color: white;
-
-    width: 40px;
-    height: 35px;
-
-    border-radius: 5px;
-    font-size: 27px;
-}
-`
-const SpanStyle = styled.span`
-width: 338px;
-word-wrap: break-word;
-
-color: #666666;
-font-size: 18px;
-margin-bottom: 160px;
-`
-const HabitStyle = styled.div`
-
-display: flex;
-flex-direction: column;
-
-
-width: 340px;
-height: 180px;
-background-color: white;
-
-margin-bottom: 50px;
-
-button{
-    width: 30px;
-    height: 30px;
-
-    font-size: 20px;
-
-    background-color: white;
-    border-width: 1px;
-    border-style: solid;
-    border-color: #D4D4D4;
-    color: #DBDBDB;
-
-    display: flex;
-    align-items: center;
-}
-input{
-    height: 45px ;
-    width: 303px;
-    border-radius: 5px;
-    border-color: #D4D4D4;
-    border-style: solid;
-    border-width: 1px;
-    
-    font-size: 20px;
-    padding: 10px;
-    margin-top: 15px;
-    margin-left: 15px;
-
-    ::placeholder{
-        color: #D4D4D4;
-        
-    }
-}
-
-`
-const CancSaveStyle = styled.div`
-
-width: 100%;
-
-display: flex;
-gap: 20px;
-align-items: flex-end;
-justify-content: flex-end;
-margin-right: 35px;
-margin-top: 20px;
-
-
-a{
-    display: flex;
-    height:35px;
-    align-items: center;
-    font-size: 16px;
-    color: #52B6FF;
-}
-button{
-    background-color: #52B6FF;
-    width:84px;
-    height: 35px;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-`
-const TitleStyle = styled.div`
-width: 90%;
-display: flex;
-justify-content: space-between;
-margin-top: 10px;
-margin-bottom: 20px;
-
-`
-const WeekBtnStyle = styled.div`
-display: flex;
-gap: 5px;
-justify-content: flex-start;
-margin-left: 15px;
-margin-top: 10px;
-
-`

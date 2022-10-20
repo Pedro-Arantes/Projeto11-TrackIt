@@ -35,6 +35,7 @@ const [status, setStatus] = useState(false)
         }
         const tratarErro = (resp) => {
             console.log(resp)
+            alert(resp.response.data.message)
             setStatus(false)
         }
 
