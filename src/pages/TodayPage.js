@@ -60,7 +60,13 @@ export default function TodayPage() {
                     setPerc( percent ) 
                     
                 }
-                CreatePercent(ReturnTotal(),dataArray.length);
+                if (dataArray.length===0) {
+                    const percent = 0 
+                    setPerc( percent )
+                }else{
+                    CreatePercent(ReturnTotal(),dataArray.length);
+                }
+                
                 //console.log(perc)
             }
 
@@ -140,7 +146,7 @@ export default function TodayPage() {
             <MainStyled>
                 <DivDia>
                     <h1>{dia}</h1>
-                    <p>{Array.length === 0 ? "Nenhum hábito concluído ainda" : `${perc}% dos hábitos concluídos`}</p>
+                    <p>{Array.length === 0 ? "Nenhum hábito encontrado para hoje" : `${perc}% dos hábitos concluídos`}</p>
                 </DivDia>
                 <HabitBox>
                     
