@@ -17,6 +17,7 @@ export default function TodayPage() {
     const { img } = useContext(DataContext)
     const [Array, setArray] = useState([])
     const [reload, setReload] = useState(0)
+    const [tot, setTot] = useState(0)
     
 
     let dia = dayjs().locale("pt-br").format("dddd , DD/MM")
@@ -50,6 +51,7 @@ export default function TodayPage() {
                             total++
                         }
                     }
+                    setTot(total)
                     return total 
                 }
                 const CreatePercent = (partialValue,totalValue)=>{
@@ -136,6 +138,7 @@ export default function TodayPage() {
             
         }
 
+
         
         
 
@@ -144,7 +147,7 @@ export default function TodayPage() {
         <>
             <Header img={img} />
             <MainStyled>
-                <DivDia>
+                <DivDia status={Array.length === 0 || tot === 0 ? false : true}>
                     <h1>{dia}</h1>
                     <p>{Array.length === 0 ? "Nenhum hábito encontrado para hoje" : `${perc}% dos hábitos concluídos`}</p>
                 </DivDia>
@@ -175,7 +178,7 @@ h1{
 }
 p{
     font-size: 18px;
-    color: #BABABA;
+    color:${props => props.status ? "#8FC549" :"#BABABA"} ;
 }
 
 `
